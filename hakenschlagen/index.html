@@ -1,1 +1,80 @@
+<!DOCTYPE html>
+<html>
+<body>
 
+<canvas id="myCanvas" width="440" height="210" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML canvas tag.</canvas>
+
+<script>
+function getRandomInt(max) {
+return Math.floor(Math.random() * max);
+}
+
+var feld = new Array(19*5);
+var free = [...feld.keys()];
+feld[19*2+9]='fuchs';
+free.splice(19*2+9, 1);
+free.splice(0, 5);
+free.splice(-5, 5);
+
+var feldFüllen = function(name, anzahl, prüfeNachbarn) {
+for (var i = 0; i < anzahl; ++i) {
+var ii = getRandomInt(free.length);
+var feldIndex = free.splice(ii, 1)[0];
+feld[feldIndex] = name;
+}
+};
+
+feldFüllen('baum', 6, true);
+feldFüllen('löwenzahn', 15, false);
+feldFüllen('salat', 12, false);
+feldFüllen('karotte', 9, false);
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.lineWidth = 2;
+ctx.strokeStyle = '#666';
+var r = 10, d = 1;
+for (var i = 0; i < 19; i++) {
+for (var j = 0; j < 5; j++) {
+var x = 1 + r + (2 * r + 3) * i;
+var y = 1 + r + (2 * r + 6) * j + Math.abs(6 - i % 12) * (2 + r + 2);
+ctx.beginPath();
+ctx.arc(x, y, r, 0, 2 * Math.PI);
+switch (feld[j + i * 5]) {
+case 'acker':
+default:
+ctx.fillStyle = 'burlywood';
+ctx.fill();
+break;
+case 'fuchs':
+ctx.fillStyle = 'crimson';
+ctx.fill();
+break;
+case 'löwenzahn':
+ctx.fillStyle = 'gold';
+ctx.fill();
+break;
+case 'baum':
+ctx.fillStyle = 'ForestGreen';
+ctx.fill();
+break;
+case 'karotte':
+ctx.fillStyle = 'orange';
+ctx.fill();
+break;
+case 'salat':
+ctx.fillStyle = 'limegreen';
+ctx.fill();
+break;
+case 'maulwurf':
+ctx.fillStyle = 'brown';
+ctx.fill();
+break;
+}
+ctx.stroke();
+}
+}
+</script> 
+</body>
+</html>
